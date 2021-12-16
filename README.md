@@ -5,6 +5,7 @@ Stack Includes:
 Plex, 
 Jackett, 
 Organizr, 
+Sabnzbd, 
 QBittorrent, 
 Radarr, 
 Sonarr, 

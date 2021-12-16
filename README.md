@@ -10,4 +10,4 @@ QBittorrent,
 Radarr, 
 Sonarr, 
 Prometheus, 
-Grafana, 
+Grafana

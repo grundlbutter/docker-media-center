@@ -2,8 +2,8 @@
 A media center I'm building on Debian using Docker.
 
 Stack Includes:
--Plex
--Jackett
+*Plex
+*Jackett
 -Organizr
 -Sabnzbd
 -QBittorrent

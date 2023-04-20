@@ -1,12 +1,10 @@
 # docker-media-center
-A media center I'm building on Debian using Docker.
+A media center I'm building with Ubuntu and Docker.
 
 Stack Includes:
 - Plex
-- Jackett
-- Organizr
+- Prowlarr
 - Sabnzbd
-- QBittorrent
 - Radarr
 - Sonarr
 - Prometheus
@@ -14,7 +12,11 @@ Stack Includes:
 - Bazarr
 - Requestrr
 - Overseerr
-- Tautulli
-- Heimdall
+- Dashy
+- Pihole
+- Kavita
 
 More as I add them.
+
+Add prometheus.yaml into home/user/Configs/Prometheus
+

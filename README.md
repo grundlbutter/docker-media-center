@@ -18,5 +18,5 @@ Stack Includes:
 
 More as I add them.
 
-Add prometheus.yaml into home/user/Configs/Prometheus
+move prometheus.yaml > home/user/Configs/Prometheus
 

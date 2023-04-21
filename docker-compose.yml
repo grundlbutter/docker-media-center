@@ -265,7 +265,7 @@ services:
       - 3000:3000
     restart: unless-stopped
     
-      navidrome:
+  navidrome:
     image: deluan/navidrome:latest
     container_name: navidrome
     ports:

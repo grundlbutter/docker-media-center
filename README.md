@@ -15,6 +15,7 @@ Stack Includes:
 - Dashy
 - Pihole
 - Kavita
+- Navidrome
 
 More as I add them.
 

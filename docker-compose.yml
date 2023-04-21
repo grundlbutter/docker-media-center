@@ -264,3 +264,22 @@ services:
     ports:
       - 3000:3000
     restart: unless-stopped
+    
+      navidrome:
+    image: deluan/navidrome:latest
+    container_name: navidrome
+    ports:
+      - 8200:4533
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles    
+      - ND_SCANINTERVAL=1m
+      - ND_LOGLEVEL=info
+      - ND_PORT=4533
+      - ND_TRANSCODINGCACHESIZE=100MB
+      - ND_SESSIONTIMEOUT=24h
+    volumes:
+      - /home/user/Configs/Navidrome/data:/data
+      - /media/storage/audio:/music:ro

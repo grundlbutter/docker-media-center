@@ -16,6 +16,7 @@ Stack Includes:
 - Pihole
 - Kavita
 - Navidrome
+- Cabby
 
 More as I add them.
 

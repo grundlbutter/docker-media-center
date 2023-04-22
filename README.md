@@ -16,9 +16,10 @@ Stack Includes:
 - Pihole
 - Kavita
 - Navidrome
-- Cabby
+- Caddy
 
 More as I add them.
 
 move prometheus.yaml > home/user/Configs/Prometheus
+move Caddyfile to home/user/Configs/Caddy
 

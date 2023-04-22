@@ -1,0 +1,5 @@
+requests.mydomain.com {
+handle /* {
+reverse_proxy localhost:5055
+}
+}

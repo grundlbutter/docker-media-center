@@ -16,6 +16,7 @@ Stack Includes:
 - Pihole
 - Kavita
 - Navidrome
+- Tatulli
 - Caddy
 
 More as I add them.

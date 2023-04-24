@@ -17,6 +17,7 @@ Stack Includes:
 - Kavita
 - Navidrome
 - Tatulli
+- Librespeed
 - Caddy
 
 More as I add them.

@@ -21,6 +21,6 @@ Stack Includes:
 
 More as I add them.
 
-move prometheus.yaml > home/user/Configs/Prometheus
+move prometheus.yaml > home/user/Configs/Prometheus \
 move Caddyfile to home/user/Configs/Caddy
 

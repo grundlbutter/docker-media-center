@@ -20,6 +20,7 @@ Stack Includes:
 - Librespeed
 - Dozzle
 - MeTube
+- pyLoad
 - Caddy
 
 More as I add them.

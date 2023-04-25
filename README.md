@@ -22,6 +22,8 @@ Stack Includes:
 - MeTube
 - pyLoad
 - Caddy
+- Gitea
+- Code-server
 
 More as I add them.
 

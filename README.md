@@ -18,6 +18,7 @@ Stack Includes:
 - Navidrome
 - Tatulli
 - Librespeed
+- Dozzle
 - Caddy
 
 More as I add them.

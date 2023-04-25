@@ -335,6 +335,20 @@ services:
     volumes:
       - /media/storage/Downloads/youtube:/downloads
 
+  pyload-ng:
+    image: lscr.io/linuxserver/pyload-ng:latest
+    container_name: pyload-ng
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+    volumes:
+      - /home/user/Configs/Pyload:/config
+      - /media/storage/download/pyload:/downloads
+    ports:
+      - 8001:8000
+      - 9666:9666 #optional
+    restart: unless-stopped
   
   caddy:
     container_name: caddy

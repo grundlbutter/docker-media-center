@@ -19,6 +19,7 @@ Stack Includes:
 - Tatulli
 - Librespeed
 - Dozzle
+- MeTube
 - Caddy
 
 More as I add them.

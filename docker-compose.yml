@@ -414,3 +414,26 @@ services:
     ports:
       - 8443:8443
     restart: unless-stopped
+    
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+      - TRANSMISSION_WEB_HOME= #optional
+      - USER= #optional
+      - PASS= #optional
+      - WHITELIST= #optional
+      - PEERPORT= #optional
+      - HOST_WHITELIST= #optional
+    volumes:
+      - /home/user/Configs/Transmission/data:/config
+      - /media/storage/Downloads/torrents:/downloads
+      - /media/storage/Downloads/torrents:/watch
+    ports:
+      - 9091:9091
+      - 51415:51413
+      - 51413:51413/udp
+    restart: unless-stopped

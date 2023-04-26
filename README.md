@@ -24,6 +24,7 @@ Stack Includes:
 - Caddy
 - Gitea
 - Code-server
+- Transmission
 
 More as I add them.
 

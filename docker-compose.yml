@@ -3,27 +3,18 @@
 services:
   plex:
     image: lscr.io/linuxserver/plex
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - capabilities:
-              - gpu
     container_name: plex
     network_mode: host
     environment:
       - PUID=1000
       - PGID=1000
       - VERSION=docker
-      - NVIDIA_VISIBLE_DEVICES=ALL
-      - NVIDIA_DRIVER_CAPABILITIES=all
       - PLEX_CLAIM= #optional
     volumes:
-      - /home/user/Configs:/config
-      - /media/storage/TV:/tv
-      - /media/storage/Movies:/movies
-      - /media/storage/Anime-Movies:/animemovies
-      - /media/storage/Anime-Series:/animeseries
+      - /mnt/ssd/plex/Configs:/config
+      - /mnt/media/TV:/mnt/media/TV
+      - /mnt/media/Movies:/mnt/media/Movies
+      - /mnt/media/Anime:/mnt/media/Anime
     restart: unless-stopped
 
   prowlarr:
@@ -34,7 +25,7 @@ services:
       - PGID=1000
       - TZ=Etc/UTC
     volumes:
-      - /home/user/Configs/Prowlarr:/config
+      - /mnt/ssd/prowlarr:/config
     ports:
       - 9696:9696
     restart: unless-stopped  
@@ -48,9 +39,9 @@ services:
       - TZ=America/Los_Angeles
       - UMASK_SET=022 #optional
     volumes:
-      - /home/user/Configs/Radarr:/config
-      - /media/storage/Downloads:/Downloads
-      - /media/storage/Movies:/Movies
+      - /mnt/ssd/radarr:/config
+      - /mnt/media/Downloads:/mnt/media/Downloads
+      - /mnt/media/Movies:/mnt/media/Movies
     ports:
       - 7878:7878
     restart: unless-stopped
@@ -64,9 +55,9 @@ services:
       - TZ=America/Los_Angeles
       - UMASK_SET=022
     volumes:
-      - /home/user/Configs/Sonarr:/config
-      - /media/storage/Downloads:/Downloads
-      - /media/storage/TV:/TV
+      - /opt/ssd/sonarr:/config
+      - /mnt/media/Downloads:/mnt/media/Downloads
+      - /mnt/media/TV:/mnt/media/TV
     ports:
       - 8989:8989
     restart: unless-stopped
@@ -80,9 +71,9 @@ services:
       - TZ=America/Los_Angeles
       - UMASK_SET=022
     volumes:
-      - /home/storage/Configs/Sonarr-anime:/config
-      - /media/storage/Downloads:/Downloads
-      - /media/storage/Anime-Series:/animeseries
+      - /opt/ssd/sonarr-anime:/config
+      - /mnt/media/Downloads:/mnt/media/Downloads
+      - /mnt/media/Anime:/mnt/media/Anime
 
     ports:
       - 9090:8989
@@ -96,7 +87,7 @@ services:
       - PGID=1000
       - TZ=America/Los_Angeles
     volumes:
-      - /home/user/Configs/Requestrr:/config
+      - /opt/ssd/requestrr:/config
     ports:
       - 4545:4545
     restart: unless-stopped
@@ -109,7 +100,7 @@ services:
       - PGID=1000
       - TZ=America/Los_Angeles
     volumes:
-      - /home/user/Configs/Overseerr:/config
+      - /opt/ssd/verseerr:/config
     ports:
       - 5055:5055
     restart: unless-stopped
@@ -122,8 +113,8 @@ services:
       - PGID=1000
       - TZ=America/Los_Angeles
     volumes:
-      - /home/user/Configs/Bazarr:/config
-      - /media/storage/TV:/TV
+      - /opt/ssd/bazarr:/config
+      - /mnt/media/TV:/mnt/media/TV
     ports:
       - 6767:6767
     restart: unless-stopped
@@ -136,33 +127,33 @@ services:
       - PGID=1000
       - TZ=America/Los_Angeles
     volumes:
-      - /home/user/Configs/Sabnzbd:/config
-      - /media/storage/Downloads:/Downloads
-      - /media/storage/Downloads/Incomplete:/incomplete-downloads #optional
+      - /opt/ssd/sabnzbd:/config
+      - /mnt/media/Downloads:/mnt/media/Downloads
+      - /mnt/media/Downloads/incomplete-downloads:/mnt/media/Downloads/incomplete-downloads #optional
     ports:
       - 8080:8080
     restart: unless-stopped
     
-  pihole:
-    container_name: pihole
-    image: pihole/pihole:latest
-    # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
-    ports:
-      - "53:53/tcp"
-      - "53:53/udp"
-      - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
-      - "1080:80/tcp" #access via http://ipaddress:1080/admin
-    environment:
-      TZ: 'America/Los_Angeles'
-      WEBPASSWORD: '${SECUREPASSWORD}'
-    # Volumes store your data between container upgrades
-    volumes:
-      - './etc-pihole:/etc/pihole'
-      - './etc-dnsmasq.d:/etc/dnsmasq.d'
-    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
-    cap_add:
-      - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
-    restart: unless-stopped
+#  pihole:
+#    container_name: pihole
+#    image: pihole/pihole:latest
+#    # For DHCP it is recommended to remove these ports and instead add: network_mode: "host"
+#    ports:
+#      - "53:53/tcp"
+#      - "53:53/udp"
+#      - "67:67/udp" # Only required if you are using Pi-hole as your DHCP server
+#      - "1080:80/tcp" #access via http://ipaddress:1080/admin
+#    environment:
+#      TZ: 'America/Los_Angeles'
+#      WEBPASSWORD: '${SECUREPASSWORD}'
+#    # Volumes store your data between container upgrades
+#    volumes:
+#      - './etc-pihole:/etc/pihole'
+#      - './etc-dnsmasq.d:/etc/dnsmasq.d'
+#    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+#    cap_add:
+#      - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
+#    restart: unless-stopped
     
   dashy:
     container_name: Dashy
@@ -186,42 +177,42 @@ services:
       retries: 3
       start_period: 40s
       
-  kavita:
-    image: kizaing/kavita:latest    # Change latest to nightly for latest develop builds (can't go back to stable)
-    container_name: kavita
-    volumes:
-      - /media/storage/reading/manga:/manga            # Manga is just an example you can have the name you want. See the following
-      - /media/storage/reading/comics:/comics          # Use as many as you want
-      - /media/storage/reading/magazines:/magazines            #
-      - /home/user/Configs/kavita:/kavita/config     # Change './data if you want to have the config files in a different place.     # /kavita/config must not be changed
-    environment:
-      - TZ=America/Los_Angeles
-    ports:
-      - 5000:5000 # Change the public port (the first 5000) if you have conflicts with other services
-    restart: unless-stopped
+#  kavita:
+#    image: kizaing/kavita:latest    # Change latest to nightly for latest develop builds (can't go back to stable)
+#    container_name: kavita
+#    volumes:
+#      - /media/storage/reading/manga:/manga            # Manga is just an example you can have the name you want. See the following
+#      - /media/storage/reading/comics:/comics          # Use as many as you want
+#      - /media/storage/reading/magazines:/magazines            #
+#      - /home/user/Configs/kavita:/kavita/config     # Change './data if you want to have the config files in a different place.     # /kavita/config must not be changed
+#    environment:
+#      - TZ=America/Los_Angeles
+#    ports:
+#      - 5000:5000 # Change the public port (the first 5000) if you have conflicts with other services
+#    restart: unless-stopped
     
-  dashy:
-    container_name: Dashy
-
-    # Pull latest image from DockerHub
-    image: lissy93/dashy
-    ports:
-      - 4000:80
-    # Set any environmental variables
-    environment:
-      - NODE_ENV=production
-    # Specify your user ID and group ID. You can find this by running `id -u` and `id -g`
-    #  - UID=1000
-    #  - GID=1000
-    # Specify restart policy
-    restart: unless-stopped
-    # Configure healthchecks
-    healthcheck:
-      test: ['CMD', 'node', '/app/services/healthcheck']
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
+#  dashy:
+#    container_name: Dashy
+#
+#    # Pull latest image from DockerHub
+#    image: lissy93/dashy
+#    ports:
+#      - 4000:80
+#    # Set any environmental variables
+#    environment:
+#      - NODE_ENV=production
+#    # Specify your user ID and group ID. You can find this by running `id -u` and `id -g`
+#    #  - UID=1000
+#    #  - GID=1000
+#    # Specify restart policy
+#    restart: unless-stopped
+#    # Configure healthchecks
+#    healthcheck:
+#      test: ['CMD', 'node', '/app/services/healthcheck']
+#      interval: 1m30s
+#      timeout: 10s
+#      retries: 3
+#      start_period: 40s
       
       
   prometheus:
@@ -233,7 +224,7 @@ services:
       - TZ=America/Los_Angeles
       - UMASK_SET=022
     volumes:
-      - /home/user/Configs/Prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /opt/ssd/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - 9292:9090
     restart: unless-stopped
@@ -253,43 +244,43 @@ services:
       - 9100:9090
     restart: unless-stopped
     
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Los_Angeles
-      - UMASK_SET=022
-    ports:
-      - 3000:3000
-    restart: unless-stopped
+#  grafana:
+#    image: grafana/grafana
+#    container_name: grafana
+#    environment:
+#      - PUID=1000
+#      - PGID=1000
+#      - TZ=America/Los_Angeles
+#      - UMASK_SET=022
+#    ports:
+#      - 3000:3000
+#    restart: unless-stopped
     
-  navidrome:
-    image: deluan/navidrome:latest
-    container_name: navidrome
-    ports:
-      - 8200:4533
-    restart: unless-stopped
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Los_Angeles    
-      - ND_SCANINTERVAL=1m
-      - ND_LOGLEVEL=info
-      - ND_PORT=4533
-      - ND_TRANSCODINGCACHESIZE=100MB
-      - ND_SESSIONTIMEOUT=24h
-    volumes:
-      - /home/user/Configs/Navidrome/data:/data
-      - /media/storage/audio:/music:ro
+#  navidrome:
+#    image: deluan/navidrome:latest
+#    container_name: navidrome
+#    ports:
+#      - 8200:4533
+#    restart: unless-stopped
+#    environment:
+#      - PUID=1000
+#      - PGID=1000
+#      - TZ=America/Los_Angeles    
+#      - ND_SCANINTERVAL=1m
+#      - ND_LOGLEVEL=info
+#      - ND_PORT=4533
+#      - ND_TRANSCODINGCACHESIZE=100MB
+#      - ND_SESSIONTIMEOUT=24h
+#    volumes:
+#      - /home/user/Configs/Navidrome/data:/data
+#      - /media/storage/audio:/music:ro
       
   tautulli:
     image: ghcr.io/tautulli/tautulli
     container_name: tautulli
     restart: unless-stopped
     volumes:
-      - /home/user/Configs/Tatulli:/config
+      - /opt/ssd/tautulli:/config
     environment:
       - PUID=1000
       - PGID=1000
@@ -297,26 +288,26 @@ services:
     ports:
       - 8181:8181
       
-  librespeed:
-    image: lscr.io/linuxserver/librespeed:latest
-    container_name: librespeed
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Los_Angeles
-      - PASSWORD=PASSWORD
-      - CUSTOM_RESULTS=false #optional
-      - DB_TYPE=sqlite #optional
-      - DB_NAME=DB_NAME #optional
-      - DB_HOSTNAME=DB_HOSTNAME #optional
-      - DB_USERNAME=DB_USERNAME #optional
-      - DB_PASSWORD=DB_PASSWORD #optional
-      - DB_PORT=DB_PORT #optional
-    volumes:
-      - /home/user/Configs/Librespeed/config:/config
-    ports:
-      - 1082:80
-    restart: unless-stopped
+#  librespeed:
+#    image: lscr.io/linuxserver/librespeed:latest
+#    container_name: librespeed
+#    environment:
+#      - PUID=1000
+#      - PGID=1000
+#      - TZ=America/Los_Angeles
+#      - PASSWORD=PASSWORD
+#      - CUSTOM_RESULTS=false #optional
+#      - DB_TYPE=sqlite #optional
+#      - DB_NAME=DB_NAME #optional
+#      - DB_HOSTNAME=DB_HOSTNAME #optional
+#      - DB_USERNAME=DB_USERNAME #optional
+#      - DB_PASSWORD=DB_PASSWORD #optional
+#      - DB_PORT=DB_PORT #optional
+#    volumes:
+#      - /home/user/Configs/Librespeed/config:/config
+#    ports:
+#      - 1082:80
+#    restart: unless-stopped
     
   dozzle:
     container_name: dozzle
@@ -333,22 +324,22 @@ services:
     ports:
       - "8081:8081"
     volumes:
-      - /media/storage/Downloads/youtube:/downloads
+      - /mnt/media/Downloads/youtube:/mnt/media/Downloads/youtube
 
-  pyload-ng:
-    image: lscr.io/linuxserver/pyload-ng:latest
-    container_name: pyload-ng
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Los_Angeles
-    volumes:
-      - /home/user/Configs/Pyload:/config
-      - /media/storage/download/pyload:/downloads
-    ports:
-      - 8001:8000
-      - 9666:9666 #optional
-    restart: unless-stopped
+#  pyload-ng:
+#    image: lscr.io/linuxserver/pyload-ng:latest
+#    container_name: pyload-ng
+#    environment:
+#      - PUID=1000
+#      - PGID=1000
+#      - TZ=America/Los_Angeles
+#    volumes:
+#      - /home/user/Configs/Pyload:/config
+#      - /media/storage/download/pyload:/downloads
+#    ports:
+#      - 8001:8000
+#      - 9666:9666 #optional
+#    restart: unless-stopped
   
   caddy:
     container_name: caddy
@@ -358,34 +349,34 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - /home/user/Configs/Caddy/Caddyfile:/etc/caddy/Caddyfile
+      - /opt/ssd/caddy/Caddyfile:/etc/caddy/Caddyfile
       # - $PWD/site:/srv
-      - /home/user/Configs/Caddy/data:/data
-      - /home/user/Configs/Caddy/config:/config
+      - /opt/ssd/caddy/data:/data
+      - /opt/ssd/caddy/config:/config
 
-  gitea-server:
-    image: gitea/gitea:1.19.0
-    container_name: gitea
-    environment:
-      - USER_UID=1000
-      - USER_GID=1000
-      - GITEA__database__DB_TYPE=mysql
-      - GITEA__database__HOST=db:3306
-      - GITEA__database__NAME=gitea
-      - GITEA__database__USER=gitea
-      - GITEA__database__PASSWD=gitea
-    restart: always
-    networks:
-      - gitea
-    volumes:
-      - /home/user/Configs/gitea:/data
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-    ports:
-      - "3001:3000"
-      - "222:22"
-    depends_on:
-      - db
+#  gitea-server:
+#    image: gitea/gitea:1.19.0
+#    container_name: gitea
+#    environment:
+#      - USER_UID=1000
+#      - USER_GID=1000
+#      - GITEA__database__DB_TYPE=mysql
+#      - GITEA__database__HOST=db:3306
+#      - GITEA__database__NAME=gitea
+#      - GITEA__database__USER=gitea
+#      - GITEA__database__PASSWD=gitea
+#    restart: always
+#    networks:
+#      - gitea
+#    volumes:
+#      - /home/user/Configs/gitea:/data
+#      - /etc/timezone:/etc/timezone:ro
+#      - /etc/localtime:/etc/localtime:ro
+#    ports:
+#      - "3001:3000"
+#      - "222:22"
+#    depends_on:
+#      - db
 
   db:
     image: mysql:8
@@ -398,42 +389,42 @@ services:
     networks:
       - gitea
     volumes:
-      - /home/user/Configs/mysql:/var/lib/mysql
+      - /opt/ssd/mysql:/var/lib/mysql
       
-  code-server:
-    image: lscr.io/linuxserver/code-server:latest
-    container_name: code-server
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Los_Angeles
-      - PASSWORD=${PASSWORD}
-      - SUDO_PASSWORD=${SUDO_PASSWORD}
-    volumes:
-      - /home/user/Configs/Code-server:/config
-    ports:
-      - 8443:8443
-    restart: unless-stopped
+#  code-server:
+#    image: lscr.io/linuxserver/code-server:latest
+#    container_name: code-server
+#    environment:
+#      - PUID=1000
+#      - PGID=1000
+#      - TZ=America/Los_Angeles
+#      - PASSWORD=${PASSWORD}
+#      - SUDO_PASSWORD=${SUDO_PASSWORD}
+#    volumes:
+#      - /home/user/Configs/Code-server:/config
+#    ports:
+#      - 8443:8443
+#    restart: unless-stopped
     
-  transmission:
-    image: lscr.io/linuxserver/transmission:latest
-    container_name: transmission
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Los_Angeles
-      - TRANSMISSION_WEB_HOME= #optional
-      - USER= #optional
-      - PASS= #optional
-      - WHITELIST= #optional
-      - PEERPORT= #optional
-      - HOST_WHITELIST= #optional
-    volumes:
-      - /home/user/Configs/Transmission/data:/config
-      - /media/storage/Downloads/torrents:/downloads
-      - /media/storage/Downloads/torrents:/watch
-    ports:
-      - 9091:9091
-      - 51415:51413
-      - 51413:51413/udp
-    restart: unless-stopped
+#  transmission:
+#    image: lscr.io/linuxserver/transmission:latest
+#    container_name: transmission
+#    environment:
+#      - PUID=1000
+#      - PGID=1000
+#      - TZ=America/Los_Angeles
+#      - TRANSMISSION_WEB_HOME= #optional
+#      - USER= #optional
+#      - PASS= #optional
+#      - WHITELIST= #optional
+#      - PEERPORT= #optional
+#      - HOST_WHITELIST= #optional
+#    volumes:
+#      - /home/user/Configs/Transmission/data:/config
+#      - /media/storage/Downloads/torrents:/downloads
+#      - /media/storage/Downloads/torrents:/watch
+#    ports:
+#      - 9091:9091
+#      - 51415:51413
+#      - 51413:51413/udp
+#    restart: unless-stopped
